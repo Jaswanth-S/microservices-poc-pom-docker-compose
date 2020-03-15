@@ -1,0 +1,59 @@
+version: '3'
+services:
+
+  eurekaserver:
+    image: eureka-servcie
+    build: eureka-server/
+    restart: always
+    network_mode: host
+    hostname: localhost
+    ports:
+      - 8761:8761
+    healthcheck:
+      test: "exit 0"
+
+  mongo:
+    image: mongo
+    restart: always
+    network_mode: host
+    hostname: localhost
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: "exit 0"
+
+  config-server:
+    image: config-server
+    build: config-server/
+    restart: always
+    network_mode: host
+    hostname: localhost
+    ports:
+      - 8888:8888
+    healthcheck:
+      test: "exit 0"
+
+  apigateway:
+    image: zuul-service
+    build: zuul-gateway/
+    restart: always
+    network_mode: host
+    hostname: localhost
+    ports:
+      - 8092:8092
+    healthcheck:
+      test: "exit 0"
+
+  mongo-crud-app:
+    image: mongo-crud-app
+    build: demoMongoDb/
+    container_name: springboot-mongo-crud
+    restart: always
+    network_mode: host
+    hostname: localhost
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+    healthcheck:
+      test: "exit 0"
